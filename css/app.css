@@ -1,0 +1,25 @@
+.navbar-brand.app-name,
+.navbar-brand.app-name:hover{
+    font-size: 1.35rem;
+    margin-right: 1.25rem;
+    color: #FFCD00;
+    opacity: 0.925;
+}
+.navbar-brand img {
+    height: 2.4rem;
+}
+.card-title.question-category {
+    font-size: 1rem;
+}
+
+.row-title {
+    font-size: 1.1rem;
+}
+
+.matrix-item {
+    flex: 1;
+}
+
+.matrix-text {
+    flex: 1;
+}
