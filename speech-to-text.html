@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        .bottom-spacer {
+            height: 100px;
+        }
+    </style>
+
+    <title>Speech to Text</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a href="https://www.uihealthcare.org" class="navbar-brand" target="_blank">
+            <img src="images/sig_logo.png" alt="UIHC Logo">
+        </a>
+        <a class="navbar-brand app-name" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link active" href="#">Evals <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="#">Settings</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <ul class="nav nav-pills m-3">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">As Envisioned</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="classic.html">Comparison to Classic Matrix</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="both.html">Both</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="faq.html">FAQ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Speech to Text</a>
+            </li>
+        </ul>
+
+        <h3 class="mb-4">Speech to Text Example</h3>
+
+        <div class="alert alert-info">
+            <p>Use this page to text speech to text recognition in your browser. This should function on recent versions of Google Chrome and its related family of browsers (Chromium, recent Edge version).</p>
+            <p class="mb-0"><strong>Important!</strong> Text to speech is provided by the browser and whichever service it chooses to use for speech recognition. You <strong><em>must</em></strong> have continuous internet access while speaking and CCOM has no control what-so-ever over the speech recognition process.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleTextInput">Text Input</label>
+            <input type="email" class="form-control" id="exampleTextInput" x-webkit-speech>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleTextarea">Text Area Input</label>
+            <textarea class="form-control" id="exampleTextarea" rows="3" x-webkit-speech></textarea>
+        </div>
+
+
+        <div class="bottom-spacer"></div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
