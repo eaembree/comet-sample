@@ -153,51 +153,47 @@
                 return;
             }
 
-            function startSpeechProcessing(){
-                recognition.start();
-            }
-
-            function stopSpeechProcessing(){
-                recognition.stop();
-            }
-
-            function setElementsToRecording() {
-                theContainer.removeClass('not-recording');
-                theContainer.addClass('is-recording');
-                theButton.removeClass('btn-outline-secondary');
-                theButton.addClass('btn-danger');
-            }
-
-            function setElementsToNotRecording() {
-                theContainer.removeClass('is-recording');
-                theContainer.addClass('not-recording');
-                theButton.removeClass('btn-danger');
-                theButton.addClass('btn-outline-secondary');
-            }
-
+            var recognition = new SpeechRecognition();
             var recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.lang = 'en-US';
             recognition.interimResults = true;
             recognition.maxAlternatives = 1;
+
+            function startRecognition() {
+                theContainer.removeClass('not-recording');
+                theContainer.addClass('is-recording');
+                theButton.removeClass('btn-outline-secondary');
+                theButton.addClass('btn-danger');
+                
+                recognition.start();
+            }
+
+            function stopRecognition() {
+                theContainer.removeClass('is-recording');
+                theContainer.addClass('not-recording');
+                theButton.removeClass('btn-danger');
+                theButton.addClass('btn-outline-secondary');
+
+                recognition.stop();
+            }
+
             recognition.onresult = function(event){
                 console.log('onresult', event);
             }
             recognition.onspeechend = function(){
                 console.log('onspeechend');
+                stopRecognition();
             };
 
             theButton.click(function () {
                 console.log('recording btn clicked for ' + targetSelector);
                 if (theContainer.hasClass('is-recording')) {
                     // stop recording
-                    setElementsToNotRecording();
-                    startSpeechProcessing();
-                    stopSpeechProcessing();
+                    stopRecognition();
                 } else {
                     // start recording
-                    setElementsToRecording();
-                    startSpeechProcessing();
+                    startRecognition();
                 }
             });
         }
