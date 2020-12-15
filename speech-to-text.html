@@ -178,13 +178,43 @@
                 recognition.stop();
             }
 
+            recognition.onstart = function(){
+                console.log('onstart');
+            }
+            recognition.onend = function(){
+                console.log('onend');
+            }
+            recognition.onerror = function(){
+                console.log('onerror');
+            }
             recognition.onresult = function(event){
                 console.log('onresult', event);
+            }
+            recognition.onnomatch = function(){
+                console.log('onnomatch');
+            }
+
+            recognition.onspeechstart = function(){
+                console.log('onspeechstart');
             }
             recognition.onspeechend = function(){
                 console.log('onspeechend');
                 stopRecognition();
             };
+
+            recognition.onaudiostart = function(){
+                console.log('onaudiostart');
+            }
+            recognition.onaudioend = function(){
+                console.log('onaudioend');
+            }
+
+            recognition.onsoundstart = function(){
+                console.log('onsoundstart');
+            }
+            recognition.onsoundend = function(){
+                console.log('onsoundend');
+            }
 
             theButton.click(function () {
                 console.log('recording btn clicked for ' + targetSelector);
