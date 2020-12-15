@@ -9,6 +9,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.min.css"
+        integrity="sha512-kJ30H6g4NGhWopgdseRb8wTsyllFUYIx3hiUwmGAkgA9B/JbzUBDQVr2VVlWGde6sdBVOG7oU8AL35ORDuMm8g==" crossorigin="anonymous" />
     <link rel="stylesheet" href="css/app.css">
     <style>
         .bottom-spacer {
@@ -59,18 +61,35 @@
         <h3 class="mb-4">Speech to Text Example</h3>
 
         <div class="alert alert-info">
-            <p>Use this page to text speech to text recognition in your browser. This should function on recent versions of Google Chrome and its related family of browsers (Chromium, recent Edge version).</p>
+            <p>Test text speech to text recognition in your browser on this page. Speech to text is implemented by your browser, not by CCOM. This should function on recent versions of Google Chrome and its related family of browsers (Chromium, recent Edge version).</p>
+            <p class="mb-0">A few things to know about speech to text:</p>
+            <ul>
+                <li>It is implemented by your browser, not CCOM.</li>
+                <li>We cannot add support to a browser which does not support it. You must wait for the vendor to add support. Depending on your browser there may be a plug for this.</li>
+                <li></li>
+                <li>CCOM has no control over the speech recognition quality.</li>
+            </ul>
             <p class="mb-0"><strong>Important!</strong> Text to speech is provided by the browser and whichever service it chooses to use for speech recognition. You <strong><em>must</em></strong> have continuous internet access while speaking and CCOM has no control what-so-ever over the speech recognition process.</p>
         </div>
 
-        <div class="form-group">
-            <label for="exampleTextInput">Text Input</label>
-            <input type="text" class="form-control" id="exampleTextInput" x-webkit-speech>
+        <label for="exampleTextInput">Text Input</label>
+        <div class="input-group mb-3" data-add-speech="true">
+            <input type="text" class="form-control" id="exampleTextInput">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" data-record-button="true">
+                    <i class="fa-fw fas fa-microphone"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="exampleTextarea">Text Area Input</label>
-            <textarea class="form-control" id="exampleTextarea" rows="3" x-webkit-speech></textarea>
+        <label for="exampleTextarea">Text Area Input</label>
+        <div class="input-group mb-3" data-add-speech="true">
+            <textarea class="form-control" id="exampleTextarea" rows="3" data-add-speech="true"></textarea>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" data-record-button="true">
+                    <i class="fa-fw fas fa-microphone"></i>
+                </button>
+            </div>
         </div>
 
 
@@ -89,6 +108,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+        integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            
+        });
+    </script>
 </body>
 
 </html>
