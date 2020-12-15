@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.min.css"
-        integrity="sha512-kJ30H6g4NGhWopgdseRb8wTsyllFUYIx3hiUwmGAkgA9B/JbzUBDQVr2VVlWGde6sdBVOG7oU8AL35ORDuMm8g==" crossorigin="anonymous" />
+        integrity="sha512-kJ30H6g4NGhWopgdseRb8wTsyllFUYIx3hiUwmGAkgA9B/JbzUBDQVr2VVlWGde6sdBVOG7oU8AL35ORDuMm8g=="
+        crossorigin="anonymous" />
     <link rel="stylesheet" href="css/app.css">
     <style>
         .bottom-spacer {
@@ -61,32 +62,39 @@
         <h3 class="mb-4">Speech to Text Example</h3>
 
         <div class="alert alert-info">
-            <p>Test text speech to text recognition in your browser on this page. Speech to text is implemented by your browser, not by CCOM. This should function on recent versions of Google Chrome and its related family of browsers (Chromium, recent Edge version).</p>
+            <p>Test text speech to text recognition in your browser on this page. Speech to text is implemented by your
+                browser, not by CCOM. This should function on recent versions of Google Chrome and its related family of
+                browsers (Chromium, recent Edge version).</p>
             <p class="mb-0">A few things to know about speech to text:</p>
             <ul>
                 <li>It is implemented by your browser, not CCOM.</li>
-                <li>We cannot add support to a browser which does not support it. You must wait for the vendor to add support. Depending on your browser there may be a plug for this.</li>
+                <li>We cannot add support to a browser which does not support it. You must wait for the vendor to add
+                    support. Depending on your browser there may be a plug for this.</li>
                 <li></li>
                 <li>CCOM has no control over the speech recognition quality.</li>
             </ul>
-            <p class="mb-0"><strong>Important!</strong> Text to speech is provided by the browser and whichever service it chooses to use for speech recognition. You <strong><em>must</em></strong> have continuous internet access while speaking and CCOM has no control what-so-ever over the speech recognition process.</p>
+            <p class="mb-0"><strong>Important!</strong> Text to speech is provided by the browser and whichever service
+                it chooses to use for speech recognition. You <strong><em>must</em></strong> have continuous internet
+                access while speaking and CCOM has no control what-so-ever over the speech recognition process.</p>
         </div>
 
         <label for="exampleTextInput">Text Input</label>
-        <div class="input-group mb-3" data-add-speech="true">
+        <div class="input-group mb-3" data-speech="true">
             <input type="text" class="form-control" id="exampleTextInput">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" data-record-button="true">
+                <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
+                    data-speech-target="#exampleTextInput">
                     <i class="fa-fw fas fa-microphone"></i>
                 </button>
             </div>
         </div>
 
         <label for="exampleTextarea">Text Area Input</label>
-        <div class="input-group mb-3" data-add-speech="true">
-            <textarea class="form-control" id="exampleTextarea" rows="3" data-add-speech="true"></textarea>
+        <div class="input-group mb-3" data-speech="true">
+            <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" data-record-button="true">
+                <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
+                    data-speech-target='#exampleTextarea'>
                     <i class="fa-fw fas fa-microphone"></i>
                 </button>
             </div>
@@ -112,8 +120,104 @@
         integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ=="
         crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function(){
-            
+        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+
+        function supportedEach(idx, el) {
+            var theContainer = $(el);
+
+            if (!theContainer.hasClass('not-recording')) {
+                theContainer.addClass('not-recording');
+            }
+
+            var theButton = theContainer.find('button[data-speech-record="true"]');
+            if (theButton.length == 0) {
+                console.log('No recording button found');
+                return;
+            } else if (theButton.length > 1) {
+                console.log('More than one recording button found');
+                return;
+            }
+
+            var targetSelector = theButton.data('speech-target');
+            if (typeof targetSelector != 'string') {
+                console.log('Missing data-speech-target');
+                return;
+            }
+
+            var theInput = $(targetSelector);
+            if (theInput.lengt == 0) {
+                console.log('Cound\'t find speech target of data-speech-target');
+                return;
+            } else if (theInput.length > 1) {
+                console.log('More than one element matches the data-speech-target selector');
+                return;
+            }
+
+            function startSpeechProcessing(){
+                recognition.start();
+            }
+
+            function stopSpeechProcessing(){
+                recognition.stop();
+            }
+
+            function setElementsToRecording() {
+                theContainer.removeClass('not-recording');
+                theContainer.addClass('is-recording');
+                theButton.removeClass('btn-outline-secondary');
+                theButton.addClass('btn-danger');
+            }
+
+            function setElementsToNotRecording() {
+                theContainer.removeClass('is-recording');
+                theContainer.addClass('not-recording');
+                theButton.removeClass('btn-danger');
+                theButton.addClass('btn-outline-secondary');
+            }
+
+            var recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.onresult = function(event){
+                console.log('onresult', event);
+            }
+            recognition.onspeechend = function(){
+                console.log('onspeechend');
+            };
+
+            theButton.click(function () {
+                console.log('recording btn clicked for ' + targetSelector);
+                if (theContainer.hasClass('is-recording')) {
+                    // stop recording
+                    setElementsToNotRecording();
+                    startSpeechProcessing();
+                    stopSpeechProcessing();
+                } else {
+                    // start recording
+                    setElementsToRecording();
+                    startSpeechProcessing();
+                }
+            });
+        }
+
+        function unsupportedEach(idx, el) {
+            var theContainer = $(el);
+            var theButton = theContainer.find('button[data-speech-record="true"]');
+            theButton.click(function(){
+                alert('Sorry, your browser does not support speech to text.');
+            });
+         }
+
+        function initializeSpeech(isSupported) {
+            isSupported = isSupported || true;
+
+            $('[data-speech="true"]').each(isSupported ? supportedEach : unsupportedEach);
+        }
+
+        $(document).ready(function () {
+            initializeSpeech(typeof SpeechRecognition !== 'undefined');
         });
     </script>
 </body>
