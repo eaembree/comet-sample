@@ -78,8 +78,8 @@
           to you</strong>. If you are comfortable on mobile, go for it. If you'd rather use a desktop screen and full
         keyboard you can do so. You may find that certain forms will be easy on mobile and others will need a desktop.
         This will be entirely your choice.</p>
-      <p>Additionally, many phones now support speech to text options. This allows you to speak to the phone and it will
-        translate your comments into text. This is another option for entering comments.</p>
+      <p>Additionally, some web browsers, including those on phones, now support speech to text options. This allows you to speak to the phone and it will
+        translate your comments into text. This is another option for entering comments. See <a href=#speech-to-text>Speech to Text</a> below for more information.</p>
     </div>
 
     <h4 class="mt-5">Can a question display differently on different forms?</h4>
@@ -92,10 +92,33 @@
     </div>
 
     <h4 class="mt-5">Are choices made now about question display permanent? Are they set in stone?</h4>
-    <div class=ml-2>
+    <div class="ml-2">
       <p>Yes and no. There will be plenty of opportunity to make tweaks to how questions display and behave going
         forward. However once development starts in earnest there will not be an opportunity to do so in the near term
         due to the focus on core application development.</p>
+    </div>
+
+    <h4 class="mt-5" id="speech-to-text">Speech to Text</h4>
+    <div class="ml=2">
+        <p class="mb-0">A few things to know about speech to text:</p>
+        <ul>
+            <li>
+              It is implemented by your browser, not CCOM.
+              <ul>
+                <li>At the time of writing (12/15/2020) recent versions of Google Chrome and Microsoft Edge have support while Firefox does not.</li>
+                <li>We cannot add support to a browser which does not support it. You must wait for the vendor to add
+                  support. Depending on your browser there may be a plugin for this.</li>
+              </ul>
+            </li>
+            
+            <li>
+              It works by sending your speech audio data over the Internet to a server which processes the audio input into text which is sends back to the browser. In the case of Google Chrome this data is sent to Google.
+              <ul>
+                <li>This being the case, <strong>do not use speech to text for highly sensitive data you would not want outside entities to be able to see.</strong></li>
+              </ul>
+            </li>
+            <li>CCOM has no control over the speech recognition quality.</li>
+        </ul>
     </div>
 
     <div class="bottom-spacer"></div>

@@ -61,25 +61,30 @@
 
         <h3 class="mb-4">Speech to Text Example</h3>
 
-        <div class="alert alert-info">
-            <p>Test text speech to text recognition in your browser on this page. Speech to text is implemented by your
-                browser, not by CCOM. This should function on recent versions of Google Chrome and its related family of
-                browsers (Chromium, recent Edge version).</p>
-            <p class="mb-0">A few things to know about speech to text:</p>
-            <ul>
-                <li>It is implemented by your browser, not CCOM.</li>
-                <li>We cannot add support to a browser which does not support it. You must wait for the vendor to add
-                    support. Depending on your browser there may be a plug for this.</li>
-                <li></li>
-                <li>CCOM has no control over the speech recognition quality.</li>
-            </ul>
-            <p class="mb-0"><strong>Important!</strong> Text to speech is provided by the browser and whichever service
-                it chooses to use for speech recognition. You <strong><em>must</em></strong> have continuous internet
-                access while speaking and CCOM has no control what-so-ever over the speech recognition process.</p>
+        <div class="alert alert-danger d-none" id="unsupported-message">
+            <p class="mb-0"><strong>This browser does not support speech to text.</strong> Current versions of Google Chrome and Microsoft Edge will work.</p>
         </div>
 
-        <label for="exampleTextInput">Text Input</label>
-        <div class="input-group mb-3" data-speech="true">
+        <div class="alert alert-info">
+            <p class="mb-0">Test speech to text recognition in your browser on this page. Speech to text is implemented by your
+                browser, not by CCOM. See <a href="faq.html#speech-to-text">Speech to Text</a> in the FAQ for more information.</p>
+        </div>
+
+        <h5>Instructions</h5>
+        <p>Click the <span class="btn btn-sm btn-outline-secondary"><i class="fa-fw fas fa-microphone"></i></span> button to start recording text for the associated field. The input field will populate with the text result shortly after you stop speaking.</p>
+        <p>Click the <span class="btn btn-sm btn-danger"><i class="fa-fw fas fa-microphone"></i></span> button to stop recording (it may stop on its own, see below).</p>
+
+        <h3>Non-Continuous Speech Input</h3>
+        <div class="alert alert-secondary">
+            <p class="mb-0">
+                With <strong>non-continuous</strong> speech input the the browser will automatically stop recording after a short
+                break in your speech. For this page you can also click the red recording button to stop recording (it will also stop
+                if you start recording on a different field). Also for this page only, if the recording stops and you click to record
+                again it will add to your existing text instead of overwriting it.
+            </p>
+        </div>
+        <label for="exampleTextInput">Text Non-Continuous Input</label>
+        <div class="input-group mb-3" data-speech="true" data-speech-continuous="false">
             <input type="text" class="form-control" id="exampleTextInput">
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
@@ -89,12 +94,39 @@
             </div>
         </div>
 
-        <label for="exampleTextarea">Text Area Input</label>
-        <div class="input-group mb-3" data-speech="true">
+        <label for="exampleTextarea">Text Area Non-Continuous Input</label>
+        <div class="input-group mb-3" data-speech="true" data-speech-continuous="false">
             <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
                     data-speech-target='#exampleTextarea'>
+                    <i class="fa-fw fas fa-microphone"></i>
+                </button>
+            </div>
+        </div>
+
+        <h3>Continuous Speech Input</h3>
+        <div class="alert alert-secondary">
+            <p class="mb-0">With <strong>continuous</strong> speech input the the browser will not stop recording until it is told to stop recording. For this page click the red recording button to stop (it will also stop if you start recording on a different field).</p>
+        </div>
+        <label for="exampleTextInput2">Text Continuous Input</label>
+        <div class="input-group mb-3" data-speech="true" data-speech-continuous="true">
+            <input type="text" class="form-control" id="exampleTextInput2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
+                    data-speech-target="#exampleTextInput2">
+                    <i class="fa-fw fas fa-microphone"></i>
+                </button>
+            </div>
+        </div>
+
+
+        <label for="exampleTextarea2">Text Area Continous Input</label>
+        <div class="input-group mb-3" data-speech="true" data-speech-continuous="true">
+            <textarea class="form-control" id="exampleTextarea2" rows="3"></textarea>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" data-speech-record="true"
+                    data-speech-target='#exampleTextarea2'>
                     <i class="fa-fw fas fa-microphone"></i>
                 </button>
             </div>
@@ -120,7 +152,23 @@
         integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ=="
         crossorigin="anonymous"></script>
     <script>
+        var webkitUndef = window.webkitSpeechRecognition === undefined;
+        var recogUndef = window.SpeechRecognition === undefined;
+
+        if(window.webkitSpeechRecognition === undefined) {
+            window.webkitSpeechRecognition = undefined;
+        }
+
+        if(window.SpeechRecognition === undefined) {
+            window.SpeechRecognition = undefined;
+        }
+
         var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+
+        var currentSpeech = {
+            recog: null,
+            stopCallback: null
+        };
 
         function supportedEach(idx, el) {
             var theContainer = $(el);
@@ -154,8 +202,7 @@
             }
 
             var recognition = new SpeechRecognition();
-            var recognition = new SpeechRecognition();
-            recognition.continuous = false;
+            recognition.continuous = theContainer.data('speech-continuous') == true;
             recognition.lang = 'en-US';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
@@ -178,6 +225,25 @@
                 recognition.stop();
             }
 
+            function appendToOutput(newText){
+                var old = '';
+                newText = newText || '';
+                old = theInput.val() + ' ' + newText;
+                theInput.val(old);
+            }
+
+            function extractContinuousResult(event) {
+                var final_transcript = '';
+                for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    final_transcript += event.results[i][0].transcript;
+                }
+                return final_transcript;
+            }
+
+            function extractNonContinuousResult(event) {
+                return event.results[0][0].transcript;
+            }
+
             recognition.onstart = function(){
                 console.log('onstart');
             }
@@ -187,8 +253,10 @@
             recognition.onerror = function(){
                 console.log('onerror');
             }
-            recognition.onresult = function(event){
+            recognition.onresult = function(event) {
                 console.log('onresult', event);
+                console.log('event.resultIndex', event.resultIndex);
+                appendToOutput(recognition.continuous ? extractContinuousResult(event) : extractNonContinuousResult(event));
             }
             recognition.onnomatch = function(){
                 console.log('onnomatch');
@@ -217,13 +285,16 @@
             }
 
             theButton.click(function () {
-                console.log('recording btn clicked for ' + targetSelector);
+                if(currentSpeech.recog !== recognition && currentSpeech.stopCallback) {
+                    currentSpeech.stopCallback();
+                }
+
                 if (theContainer.hasClass('is-recording')) {
-                    // stop recording
                     stopRecognition();
-                } else {
-                    // start recording
+                } else if(theContainer.hasClass('not-recording')) {
                     startRecognition();
+                    currentSpeech.recog = recognition;
+                    currentSpeech.stopCallback = stopRecognition;
                 }
             });
         }
@@ -237,9 +308,15 @@
          }
 
         function initializeSpeech(isSupported) {
-            isSupported = isSupported || true;
+            if(typeof isSupported === 'undefined') {
+                isSupported = true;
+            }
 
             $('[data-speech="true"]').each(isSupported ? supportedEach : unsupportedEach);
+
+            if(!isSupported){
+                $('#unsupported-message').removeClass('d-none');
+            }
         }
 
         $(document).ready(function () {
